@@ -1,126 +1,166 @@
- const imageContainer = document.getElementById("image-container");
-    const buttonsDiv = document.getElementById("buttons");
+const container = document.getElementById("container");
+const btnContainer = document.getElementById("btn-container");
 
-    const classes = ["img1", "img2", "img3", "img4", "img5"];
+const imageData = [
+  {
+    className:"img1",
+    src:"https://picsum.photos/id/101/200"
+  },
+  {
+    className:"img2",
+    src:"https://picsum.photos/id/102/200"
+  },
+  {
+    className:"img3",
+    src:"https://picsum.photos/id/103/200"
+  },
+  {
+    className:"img4",
+    src:"https://picsum.photos/id/104/200"
+  },
+  {
+    className:"img5",
+    src:"https://picsum.photos/id/105/200"
+  }
+];
 
-    // Pick random duplicate
-    const duplicate =
-      classes[Math.floor(Math.random() * classes.length)];
+// random duplicate
+const duplicate =
+imageData[Math.floor(Math.random()*imageData.length)];
 
-    // Create array with duplicate
-    let allImages = [...classes, duplicate];
+const finalImages = [...imageData, duplicate];
 
-    // Shuffle images
-    allImages.sort(() => Math.random() - 0.5);
+// shuffle
+finalImages.sort(()=>Math.random()-0.5);
 
-    let selectedImages = [];
+let selectedImages = [];
 
-    // Render images
-    allImages.forEach((cls, index) => {
-      const img = document.createElement("img");
+// render images
+finalImages.forEach((item,index)=>{
 
-      img.classList.add(cls);
-      img.dataset.classname = cls;
-      img.alt = "verification image";
+  const img = document.createElement("img");
 
-      img.addEventListener("click", () => handleClick(img));
+  img.src = item.src;
 
-      imageContainer.appendChild(img);
-    });
+  img.classList.add(item.className);
 
-    function handleClick(img) {
+  // IMPORTANT FOR CYPRESS
+  img.setAttribute("data-ns-test", item.className);
 
-      // Prevent double click on same image
-      if (selectedImages.includes(img)) {
-        return;
-      }
+  img.alt = "verification-image";
 
-      // Only allow 2 selections
-      if (selectedImages.length < 2) {
-        img.classList.add("selected");
-        selectedImages.push(img);
-      }
+  img.dataset.classname = item.className;
 
-      renderButtons();
-    }
+  img.addEventListener("click", ()=>handleClick(img));
 
-    function renderButtons() {
+  container.appendChild(img);
 
-      // Reset button
-      if (
-        selectedImages.length >= 1 &&
-        !document.getElementById("reset")
-      ) {
-        const resetBtn = document.createElement("button");
-        resetBtn.id = "reset";
-        resetBtn.innerHTML = "Reset";
+});
 
-        resetBtn.addEventListener("click", resetState);
+function handleClick(img){
 
-        buttonsDiv.appendChild(resetBtn);
-      }
+  // prevent selecting same image twice
+  if(selectedImages.includes(img)){
+    return;
+  }
 
-      // Verify button
-      if (
-        selectedImages.length === 2 &&
-        !document.getElementById("verify")
-      ) {
-        const verifyBtn = document.createElement("button");
-        verifyBtn.id = "verify";
-        verifyBtn.innerHTML = "Verify";
+  // only 2 selections
+  if(selectedImages.length < 2){
 
-        verifyBtn.addEventListener("click", verifyUser);
+    img.classList.add("selected");
 
-        buttonsDiv.appendChild(verifyBtn);
-      }
-    }
+    selectedImages.push(img);
+  }
 
-    function verifyUser() {
+  showResetButton();
 
-      // Remove verify button
-      const verifyBtn = document.getElementById("verify");
+  if(selectedImages.length === 2){
+    showVerifyButton();
+  }
+}
 
-      if (verifyBtn) {
-        verifyBtn.remove();
-      }
+function showResetButton(){
 
-      const para = document.createElement("p");
-      para.id = "para";
+  if(document.getElementById("reset")){
+    return;
+  }
 
-      if (
-        selectedImages[0].dataset.classname ===
-        selectedImages[1].dataset.classname
-      ) {
-        para.innerHTML = "You are a human. Congratulations!";
-      } else {
-        para.innerHTML =
-          "We can't verify you as a human. You selected the non-identical tiles.";
-      }
+  const resetBtn = document.createElement("button");
 
-      // Remove previous para if exists
-      const oldPara = document.getElementById("para");
+  resetBtn.id = "reset";
 
-      if (oldPara) {
-        oldPara.remove();
-      }
+  resetBtn.innerText = "Reset";
 
-      buttonsDiv.appendChild(para);
-    }
+  resetBtn.addEventListener("click", resetGame);
 
-    function resetState() {
+  btnContainer.appendChild(resetBtn);
+}
 
-      selectedImages.forEach(img => {
-        img.classList.remove("selected");
-      });
+function showVerifyButton(){
 
-      selectedImages = [];
+  if(document.getElementById("verify")){
+    return;
+  }
 
-      // Remove buttons
-      const resetBtn = document.getElementById("reset");
-      const verifyBtn = document.getElementById("verify");
-      const para = document.getElementById("para");
+  const verifyBtn = document.createElement("button");
 
-      if (resetBtn) resetBtn.remove();
-      if (verifyBtn) verifyBtn.remove();
-      if (para) para.remove();
-    }
+  verifyBtn.id = "verify";
+
+  verifyBtn.innerText = "Verify";
+
+  verifyBtn.addEventListener("click", verifyImages);
+
+  btnContainer.appendChild(verifyBtn);
+}
+
+function verifyImages(){
+
+  const verifyBtn = document.getElementById("verify");
+
+  if(verifyBtn){
+    verifyBtn.remove();
+  }
+
+  const oldPara = document.getElementById("para");
+
+  if(oldPara){
+    oldPara.remove();
+  }
+
+  const para = document.createElement("p");
+
+  para.id = "para";
+
+  if(
+    selectedImages[0].dataset.classname ===
+    selectedImages[1].dataset.classname
+  ){
+
+    para.innerText =
+    "You are a human. Congratulations!";
+
+  }else{
+
+    para.innerText =
+    "We can't verify you as a human. You selected the non-identical tiles.";
+  }
+
+  btnContainer.appendChild(para);
+}
+
+function resetGame(){
+
+  selectedImages.forEach(img=>{
+    img.classList.remove("selected");
+  });
+
+  selectedImages = [];
+
+  const resetBtn = document.getElementById("reset");
+  const verifyBtn = document.getElementById("verify");
+  const para = document.getElementById("para");
+
+  if(resetBtn) resetBtn.remove();
+  if(verifyBtn) verifyBtn.remove();
+  if(para) para.remove();
+}
