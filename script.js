@@ -24,19 +24,19 @@ const imageData = [
   }
 ];
 
-// random duplicate
+// choose random duplicate
 const duplicate =
-imageData[Math.floor(Math.random()*imageData.length)];
+imageData[Math.floor(Math.random() * imageData.length)];
 
 const finalImages = [...imageData, duplicate];
 
-// shuffle
-finalImages.sort(()=>Math.random()-0.5);
+// shuffle images
+finalImages.sort(() => Math.random() - 0.5);
 
 let selectedImages = [];
 
 // render images
-finalImages.forEach((item,index)=>{
+finalImages.forEach((item) => {
 
   const img = document.createElement("img");
 
@@ -51,7 +51,7 @@ finalImages.forEach((item,index)=>{
 
   img.dataset.classname = item.className;
 
-  img.addEventListener("click", ()=>handleClick(img));
+  img.addEventListener("click", () => handleClick(img));
 
   container.appendChild(img);
 
@@ -59,12 +59,12 @@ finalImages.forEach((item,index)=>{
 
 function handleClick(img){
 
-  // prevent selecting same image twice
+  // prevent same image double click
   if(selectedImages.includes(img)){
     return;
   }
 
-  // only 2 selections
+  // allow only 2 selections
   if(selectedImages.length < 2){
 
     img.classList.add("selected");
@@ -98,13 +98,15 @@ function showResetButton(){
 
 function showVerifyButton(){
 
-  if(document.getElementById("verify")){
+  // IMPORTANT
+  if(document.getElementById("btn")){
     return;
   }
 
   const verifyBtn = document.createElement("button");
 
-  verifyBtn.id = "verify";
+  // IMPORTANT
+  verifyBtn.id = "btn";
 
   verifyBtn.innerText = "Verify";
 
@@ -115,7 +117,8 @@ function showVerifyButton(){
 
 function verifyImages(){
 
-  const verifyBtn = document.getElementById("verify");
+  // IMPORTANT
+  const verifyBtn = document.getElementById("btn");
 
   if(verifyBtn){
     verifyBtn.remove();
@@ -150,17 +153,28 @@ function verifyImages(){
 
 function resetGame(){
 
-  selectedImages.forEach(img=>{
+  selectedImages.forEach((img) => {
     img.classList.remove("selected");
   });
 
   selectedImages = [];
 
   const resetBtn = document.getElementById("reset");
-  const verifyBtn = document.getElementById("verify");
+
+  // IMPORTANT
+  const verifyBtn = document.getElementById("btn");
+
   const para = document.getElementById("para");
 
-  if(resetBtn) resetBtn.remove();
-  if(verifyBtn) verifyBtn.remove();
-  if(para) para.remove();
+  if(resetBtn){
+    resetBtn.remove();
+  }
+
+  if(verifyBtn){
+    verifyBtn.remove();
+  }
+
+  if(para){
+    para.remove();
+  }
 }
