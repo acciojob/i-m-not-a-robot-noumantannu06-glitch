@@ -1,1 +1,73 @@
 /*  your css code here. If applicable */
+  body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      margin-top: 30px;
+    }
+
+    .container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      width: 420px;
+      margin: auto;
+      gap: 10px;
+    }
+
+    img {
+      width: 120px;
+      height: 120px;
+      border: 4px solid transparent;
+      cursor: pointer;
+      border-radius: 10px;
+    }
+
+    .selected {
+      border: 4px solid #1e90ff;
+    }
+
+    button {
+      margin: 15px 10px;
+      padding: 10px 20px;
+      cursor: pointer;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+    }
+
+    #verify {
+      background-color: green;
+      color: white;
+    }
+
+    #reset {
+      background-color: crimson;
+      color: white;
+    }
+
+    #para {
+      font-size: 18px;
+      font-weight: bold;
+      margin-top: 20px;
+    }
+
+    /* Image styles */
+    .img1 {
+      background: url("https://picsum.photos/id/1015/200/200") center/cover;
+    }
+
+    .img2 {
+      background: url("https://picsum.photos/id/1025/200/200") center/cover;
+    }
+
+    .img3 {
+      background: url("https://picsum.photos/id/1035/200/200") center/cover;
+    }
+
+    .img4 {
+      background: url("https://picsum.photos/id/1045/200/200") center/cover;
+    }
+
+    .img5 {
+      background: url("https://picsum.photos/id/1055/200/200") center/cover;
+    }
